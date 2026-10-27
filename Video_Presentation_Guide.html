@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Video Presentation Guide & 5-Minute Script</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 20mm 18mm 20mm 18mm;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      color: #1e293b;
+      line-height: 1.6;
+      background: #ffffff;
+      margin: 0;
+      padding: 0;
+      font-size: 13.5px;
+    }
+    .header {
+      border-bottom: 2px solid #2563eb;
+      padding-bottom: 12px;
+      margin-bottom: 24px;
+    }
+    h1 {
+      font-size: 22px;
+      color: #0f172a;
+      margin: 0 0 6px 0;
+    }
+    .subtitle {
+      font-size: 13px;
+      color: #64748b;
+      margin: 0;
+    }
+    h2 {
+      font-size: 16px;
+      color: #1e3a8a;
+      border-left: 4px solid #2563eb;
+      padding-left: 10px;
+      margin: 24px 0 12px 0;
+    }
+    h3 {
+      font-size: 14px;
+      color: #0f172a;
+      margin: 16px 0 6px 0;
+    }
+    .card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 14px;
+    }
+    .step-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+    }
+    .cue {
+      font-weight: 600;
+      color: #2563eb;
+      background: #dbeafe;
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11.5px;
+      margin-bottom: 6px;
+    }
+    .script-text {
+      background: #ffffff;
+      border-left: 3px solid #3b82f6;
+      padding: 10px 14px;
+      font-style: italic;
+      color: #0f172a;
+      margin: 6px 0 10px 0;
+      border-radius: 0 6px 6px 0;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    }
+    .hindi-meaning {
+      font-size: 12px;
+      color: #475569;
+      margin-bottom: 10px;
+      padding-left: 12px;
+    }
+    ul, ol {
+      margin: 6px 0 12px 18px;
+      padding: 0;
+    }
+    li {
+      margin-bottom: 4px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 2px 7px;
+      font-size: 11px;
+      font-weight: 600;
+      border-radius: 4px;
+      background: #e2e8f0;
+      color: #334155;
+    }
+    .page-break {
+      page-break-before: always;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>Video Presentation Guide & 5-Minute Word-by-Word Script</h1>
+    <p class="subtitle">Take-Home Assignment: User Management Dashboard with Custom Theming Engine (Full Stack Intern)</p>
+  </div>
+
+  <h2>PART 1: Video Kaise Banayein (Setup & Tools)</h2>
+
+  <div class="card">
+    <h3>1. Best Tool: Loom (Recommended & Free)</h3>
+    <ul>
+      <li>Visit <strong>www.loom.com</strong> and install the desktop app or Chrome extension.</li>
+      <li>Choose <strong>Screen + Cam</strong> (your face bubble appears in the corner, which recruiters love).</li>
+      <li>When done, Loom automatically generates a shareable web link. You can paste this link directly into your submission form!</li>
+      <li><em>Alternative:</em> Use Windows screen recorder (<strong>Win + Alt + R</strong>) or Clipchamp, then upload to Google Drive or YouTube (Unlisted).</li>
+    </ul>
+
+    <h3>2. Screen Setup Before Starting Recording</h3>
+    <ul>
+      <li><strong>Tab 1:</strong> Running frontend at <code>http://localhost:5173</code></li>
+      <li><strong>Tab 2:</strong> VS Code open with the project workspace showing <code>server/</code> and <code>client/</code></li>
+      <li>Ensure both servers are running in terminal: <code>npm run dev</code> in server and client.</li>
+    </ul>
+
+    <h3>3. Key Tips</h3>
+    <ul>
+      <li>Speak in a calm, confident, conversational tone.</li>
+      <li>Target 5 to 6 minutes duration. Reviewers care about clarity and architectural understanding.</li>
+    </ul>
+  </div>
+
+  <div class="page-break"></div>
+
+  <h2>PART 2: 5-Minute Word-by-Word Speaking Script</h2>
+
+  <!-- Minute 1 -->
+  <div class="step-box">
+    <div class="cue">TIME: 0:00 – 0:45 | SCREEN: Introduction & Dashboard Overview</div>
+    <div class="script-text">
+      "Hi everyone! My name is Ujjwal, and this is my walkthrough for the Full Stack Developer Intern Take-Home assignment: a User Management Dashboard with a zero-dependency Custom Theming Engine.<br><br>
+      When scoping this project for the 24-hour timeline, I focused on two core priorities: first, implementing a complete and reliable MERN CRUD workflow persisted end-to-end in MongoDB Atlas; and second, the main differentiator of this assignment: building a completely self-contained theming engine using native CSS variables and the browser FontFace API without using any third-party UI libraries like Tailwind or Material UI.<br><br>
+      I used modern JavaScript with Vite and React to eliminate compilation overhead and focus maximum effort on UI responsiveness, edge cases, and accessible contrast math."
+    </div>
+    <div class="hindi-meaning">
+      <strong>Iska Matlab:</strong> Apna intro dein, batayein ki 24 ghante ke time mein aapne solid MERN CRUD aur zero-dependency theming engine par focus kiya, aur React/Vite ke sath clean modern JavaScript use ki.
+    </div>
+  </div>
+
+  <!-- Minute 2 -->
+  <div class="step-box">
+    <div class="cue">TIME: 0:45 – 1:30 | SCREEN: Switch to VS Code (Show project folders)</div>
+    <div class="script-text">
+      "Let me quickly walk you through the architecture in the code:<br><br>
+      On the backend, we follow a clean Express MVC structure. The <code>User.js</code> model defines our Mongoose schema with email uniqueness and enum fields. <code>userController.js</code> handles our CRUD operations and a dedicated stats aggregation endpoint. <code>validate.js</code> catches invalid inputs before database calls, and <code>errorHandler.js</code> converts Mongoose errors into structured JSON responses.<br><br>
+      On the frontend, React is cleanly componentized: all API calls live inside a dedicated <code>api.js</code> service consumed via a custom <code>useUsers</code> hook, and all theming state is orchestrated inside <code>ThemeContext.jsx</code>."
+    </div>
+    <div class="hindi-meaning">
+      <strong>Iska Matlab:</strong> VS Code dikhakar backend MVC (models, controllers, routes, validation) aur frontend dedicated API service + Context structure explain karein.
+    </div>
+  </div>
+
+  <!-- Minute 3 -->
+  <div class="step-box">
+    <div class="cue">TIME: 1:30 – 2:45 | SCREEN: Switch to Browser (http://localhost:5173 - User Directory)</div>
+    <div class="script-text">
+      "Now let's demonstrate the application in the browser.<br><br>
+      Here on the Dashboard, we have real-time metrics fetched from MongoDB: Total Users, Active accounts, Inactive accounts, New registrations this week, and role distribution bars.<br><br>
+      Let's navigate to the User Directory to test our complete CRUD cycle:<br>
+      1. First, Create: I'll click 'Add New User'. If I submit empty or invalid fields, client validation catches it immediately. Let's create 'Aryan Gupta' with role Developer and department Engineering. As soon as I submit, the user appears in our table, and the Dashboard total count updates live.<br>
+      2. Second, Read: Clicking the eye icon opens our read-only profile modal with full details.<br>
+      3. Third, Update: Let's edit Aryan's department to 'Product Architecture'. The change is saved directly to MongoDB Atlas.<br>
+      4. Fourth, Delete: Clicking delete opens our custom Confirmation Modal. Upon confirming, the user is permanently removed from MongoDB, a success toast notifies us, and our stats decrement live."
+    </div>
+    <div class="hindi-meaning">
+      <strong>Iska Matlab:</strong> Browser me Dashboard stats dikhayein, phir Create User (validation ke sath), View details, Edit department, aur Delete confirmation modal step-by-step perform karke dikhayein.
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- Minute 4 -->
+  <div class="step-box">
+    <div class="cue">TIME: 2:45 – 4:00 | SCREEN: Click 'Theme Studio' in Navbar (Drawer opens)</div>
+    <div class="script-text">
+      "Now for the primary differentiator of this assignment: our Custom Theming Engine.<br><br>
+      This engine is built completely from scratch using native CSS custom properties on the root element composed with React Context:<br><br>
+      1. Design Presets: We have 4 coordinated presets — Oceanic Blue, Neon Violet, Darcula Slate, and Emerald Forest. Notice how clicking a preset instantly transitions all surface cards, tables, text colors, and shadows across both pages without any lag.<br><br>
+      2. Custom Button Color: Regardless of which preset is active, the user can pick any custom accent color from the color picker. Watch the primary buttons update live. Notice our WCAG contrast calculation: if I pick a bright neon yellow or green, the button text automatically flips to dark slate. If I choose crimson or dark blue, it flips to white for optimal legibility.<br><br>
+      3. Custom Font Upload: Using the browser's native FontFace API, users can upload a TTF, OTF, or WOFF font. The file is converted to Base64, registered dynamically with <code>document.fonts.add()</code>, and assigned to <code>--font-family</code>.<br><br>
+      4. Persistence: Now let's refresh the page. Both the preset, custom button color, and uploaded font persist in <code>localStorage</code> and rehydrate immediately without any flash of unstyled content!"
+    </div>
+    <div class="hindi-meaning">
+      <strong>Iska Matlab:</strong> Theme studio kholkar 4 presets switch karke dikhayein, button color change karein (text ka black/white contrast highlight karein), font upload karke dikhayein, aur page refresh karke persistence dikhayein.
+    </div>
+  </div>
+
+  <!-- Minute 5 -->
+  <div class="step-box">
+    <div class="cue">TIME: 4:00 – 5:00 | SCREEN: Wrap-up & Code Highlight</div>
+    <div class="script-text">
+      "One piece of the backend I'm particularly proud of is the aggregation endpoint <code>/api/users/stats</code>. Rather than making multiple database queries, it uses MongoDB aggregation to compute total counts, active ratios, and role breakdowns in a single query.<br><br>
+      A technical challenge I overcame was font persistence. Because binary fonts cannot be saved as plain strings in localStorage, I built a Base64 encoding pipeline with file size limits, and rehydrated it synchronously on mount to eliminate layout shifting.<br><br>
+      Given more time in a production environment, I would add server-side pagination with query limits for 100,000+ records, CSV export for user reports, and JWT authentication with role-based permissions.<br><br>
+      Thank you so much for your time and for reviewing my project!"
+    </div>
+    <div class="hindi-meaning">
+      <strong>Iska Matlab:</strong> Backend aggregation aur base64 FontFace challenge highlight karein, future roadmap batayein, aur thank you bolkar video wrap up karein.
+    </div>
+  </div>
+
+</body>
+</html>

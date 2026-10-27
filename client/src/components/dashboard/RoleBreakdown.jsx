@@ -12,7 +12,7 @@ export const RoleBreakdown = ({ roleBreakdown = {}, totalUsers = 0, activeUsers 
   const activePercent = totalUsers > 0 ? Math.round((activeUsers / totalUsers) * 100) : 0;
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1.25rem' }}>
+    <div className="dashboard-grid-two">
       {/* Role Distribution Card */}
       <div className="card">
         <h3 style={{ fontSize: '1rem', marginBottom: '0.5rem' }}>Role Distribution</h3>
