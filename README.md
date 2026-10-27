@@ -1,259 +1,160 @@
 # User Management Dashboard with Custom Theming Engine
 
-A production-ready full-stack MERN application (MongoDB, Express.js, React, Node.js) featuring a complete User Management system with live analytics and a **100% self-contained, zero-dependency custom theming engine** with preset switching, independent button accent customization, and browser-native `FontFace` font uploading.
+A full-stack MERN application for managing user accounts with a custom, zero-dependency theming engine. Built as a take-home assignment.
 
 ---
 
-## 📑 Table of Contents
-1. [Project Highlights](#project-highlights)
-2. [Theming Engine Architecture (Core Differentiator)](#theming-engine-architecture-core-differentiator)
-3. [Technology Stack & Rationale](#technology-stack--rationale)
-4. [Quickstart & Setup Instructions](#quickstart--setup-instructions)
-5. [Database Configuration (MongoDB Atlas & Local)](#database-configuration)
-6. [API Endpoints Reference](#api-endpoints-reference)
-7. [Design Decisions & Trade-offs](#design-decisions--trade-offs)
-8. [5–8 Minute Video Walkthrough Script (Section 6)](#58-minute-video-walkthrough-script)
+## What was built
+
+- **Full-stack CRUD**: Add, view, edit, and delete users with all data saved directly to MongoDB.
+- **Live Dashboard**: Shows total registered users, active vs inactive count, users added this week, and role distribution. Updates immediately when users are added or removed.
+- **Client & Server Validation**: Form validation on the client with regex email checks, plus backend schema validation with proper error messages and HTTP status codes.
+- **Delete Confirmation**: Custom modal to confirm before deleting any user record to prevent accidental deletes.
+- **Search & Filters**: Filter users by role and status, or search by name, email, or department.
+- **Custom Theming Engine (Zero external libraries)**:
+  - 4 preset color themes (Oceanic Blue, Neon Violet, Darcula Slate, Emerald Forest).
+  - Custom button color picker that overrides the preset's accent color independently, with automatic contrast text calculation (WCAG compliant black/white text).
+  - Custom font upload (.ttf, .otf, .woff) applied app-wide using the browser FontFace API.
+  - Live preview across all pages without refresh.
+  - Theme preferences persist in localStorage and reload without any flicker.
 
 ---
 
-## 🌟 Project Highlights
+## How the Theming Engine is Architected
 
-- **Zero-Dependency Theming Engine**: Pure CSS custom properties (variables) driven by a dedicated `ThemeContext`. No external UI kits, no Tailwind, no styled-components theming bloat.
-- **Dynamic Typeface Injection (`FontFace` API)**: Accepts `.ttf`, `.otf`, `.woff`, `.woff2` font files. Converts to base64, registers with the browser's `document.fonts`, applies instantly, and rehydrates from `localStorage` without Flash of Unstyled Text (FOUT).
-- **Independent Button Accent & WCAG Contrast**: Custom button color picker that overrides the preset accent. Includes dynamic relative luminance calculation ($Y = 0.299R + 0.587G + 0.114B$) to ensure accessible button text contrast (`#ffffff` or `#0f172a`).
-- **Full-Stack End-to-End CRUD**:
-  - **Create**: Modal form with client-side regex validation and backend schema validation.
-  - **Read**: Live table with search, role/status filters, and single-user detail inspection modal.
-  - **Update**: Pre-populated modal editing with unique email protection.
-  - **Delete**: Custom confirmation dialog preventing accidental deletions.
-  - **Live Dashboard**: Real-time stats synced to MongoDB (Total users, Active/Inactive breakdown, Role distribution, Recent registrations).
-- **Database Seeder**: Includes realistic sample users across multiple roles and departments (`npm run seed`).
+The theming engine is built entirely with native CSS custom properties (variables) and React Context, without using any UI kits or styling libraries like Tailwind, Bootstrap, or MUI.
+
+The active theme is composed of three parts:
+1. **Preset Tokens**: When a preset is selected, its coordinated CSS variables (--bg-primary, --bg-surface, --text-primary, --border-color, etc.) are injected directly into the document root (:root).
+2. **Button Color Override**: If the user picks a custom button color, it overrides --btn-primary-bg. An internal luminance calculation checks the background brightness and automatically sets --btn-primary-text to either white or dark slate so the button text remains readable.
+3. **Custom FontFace**: When a user uploads a font file, it gets converted to a base64 string and loaded dynamically into the browser using `new FontFace()`. It is then added to `document.fonts` and assigned to `--font-family`. The base64 data is stored in localStorage so it rehydrates immediately on reload.
 
 ---
 
-## 🎨 Theming Engine Architecture (Core Differentiator)
+## Tech Stack & Note on JavaScript
 
-The core requirement of this assignment is to compose design presets, an independent button color override, and user-uploaded custom fonts into a single unified theme without relying on third-party UI libraries.
+- **Frontend**: React 19, Vite, Plain CSS Variables
+- **Backend**: Node.js, Express (ES Modules)
+- **Database**: MongoDB Atlas via Mongoose
+- **Icons**: Lucide React
 
-### Theme Composition Formula
-$$\text{Active Theme} = \text{Preset Design Tokens} \oplus \text{Button Accent Override} \oplus \text{FontFace Typeface}$$
-
-```
-                          ┌───────────────────────────┐
-                          │  ThemeContext / useTheme  │
-                          └─────────────┬─────────────┘
-                                        │
-           ┌────────────────────────────┼────────────────────────────┐
-           ▼                            ▼                            ▼
-┌──────────────────────┐   ┌─────────────────────────┐   ┌──────────────────────┐
-│  Selected Preset     │   │  Button Color Override  │   │  Custom Font Upload  │
-│  (e.g., Neon Violet) │   │  (e.g., #e11d48)        │   │  (.ttf / .otf / etc) │
-└──────────┬───────────┘   └────────────┬────────────┘   └──────────┬───────────┘
-           │                            │                           │
-           ▼                            ▼                           ▼
-:root Design Tokens        --btn-primary-bg: #e11d48;    window.FontFace API
---bg-primary: #0e0c15;     --btn-primary-text: #fff;     document.fonts.add()
---bg-surface: #181524;     (WCAG luminance calculated)   --font-family: 'Font'
---text-primary: #f5f3ff;
-```
-
-### 1. Coordinated Design Presets
-Four presets are defined in `client/src/styles/presets.js`:
-- **Oceanic Blue** (Default): Clean, light corporate mode with slate borders and sapphire blue accents.
-- **Neon Violet**: Modern dark theme with deep graphite surfaces (`#0e0c15`), rich elevation shadows, and electric violet accents.
-- **Darcula Slate**: Pro developer dark theme with charcoal surfaces (`#1e1f22`), warm amber accents, and IntelliJ/VS Code readability.
-- **Emerald Forest**: Fresh light mode with soft mint backgrounds (`#f0fdf4`), sage cards, and pine green accents.
-
-### 2. Button Accent Override
-- An independent `<input type="color">` and curated quick-swatch palette allow the user to override button colors without altering the active preset's surface and typography palette.
-- Dynamic contrast detection in `client/src/utils/contrast.js` evaluates whether `#ffffff` or dark `#0f172a` text offers optimal legibility against the picked background color.
-- A "Reset to Preset Default" button restores the preset's native accent color.
-
-### 3. Font Loading API & Persistence
-- User uploads a font file (`.ttf`, `.otf`, `.woff`, `.woff2`).
-- The file is validated (size limit < 2.5 MB to respect browser storage safety) and read as a Base64 Data URL via `FileReader`.
-- A new instance of `window.FontFace('UserUploadedFont', url)` is constructed, loaded asynchronously, and registered into `document.fonts.add()`.
-- The `--font-family` CSS custom property on `:root` is updated to `'UserUploadedFont', system-ui, sans-serif`.
-- The Base64 string and metadata are stored in `localStorage`.
-- On application boot, `ThemeContext` rehydrates the font during the `useLayoutEffect` / initial mount lifecycle, eliminating FOUT (Flash of Unstyled Text).
+**Note on TypeScript**: As allowed by the assignment prompt (Section 4), modern JavaScript (ES6+ with React JSX) was chosen on the frontend to prioritize fast feature delivery, clean component structure, and rapid iteration of the zero-dependency theming engine within the 24-hour timeframe.
 
 ---
 
-## 🛠 Technology Stack & Rationale
+## Setup and Running Locally
 
-| Layer | Technology | Decision & Justification |
-| :--- | :--- | :--- |
-| **Frontend** | React 19 (JavaScript JSX) + Vite | Fast HMR, lightweight bundle. Standard modern JavaScript (ES6+) was chosen on the frontend to prioritize fast feature delivery, clean component architecture, and rapid theming iteration within the 24-hour evaluation timeframe (as permitted by Section 4). |
-| **Styling** | Native CSS Custom Properties | 100% compliant with the constraint of building a self-contained theming engine without third-party styling frameworks. |
-| **Backend** | Node.js + Express (ES Modules) | Clean MVC architecture with `import/export`, clear route/controller/model separation. |
-| **Database** | MongoDB Atlas via Mongoose | Cloud-hosted document store providing schema validation, indexed search, and durable persistence. |
-| **Icons** | Lucide React | Lightweight SVG icons for intuitive, polished dashboard UX. |
+### 1. Prerequisites
+- Node.js (v18 or newer)
+- npm
 
----
+### 2. Install Dependencies
 
-## 🚀 Quickstart & Setup Instructions
-
-### Prerequisites
-- Node.js (v18+ recommended, tested on v24.6.0)
-- npm (v9+)
-- Internet access for MongoDB Atlas connection
-
-### 1. Installation
-Clone the repository and install dependencies for both `server` and `client`:
+Install packages in both server and client folders:
 
 ```bash
-# Install server dependencies
+# Server
 cd server
 npm install
 
-# Install client dependencies
+# Client
 cd ../client
 npm install
 ```
 
-### 2. Environment Configuration
-The backend comes pre-configured with a working `.env`. If you want to use your own database, update `server/.env`:
+### 3. Database Setup (MongoDB)
 
-```env
-PORT=5000
-MONGODB_URI=mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/usermanagement?retryWrites=true&w=majority
-NODE_ENV=development
-```
+The project is connected to MongoDB Atlas by default via `server/.env`. 
 
-*(A template is also provided at `server/.env.example`).*
+If you want to use your own MongoDB instance:
+1. Open `server/.env` (or copy from `server/.env.example`).
+2. Update the `MONGODB_URI` line:
+   - For Local MongoDB: `MONGODB_URI=mongodb://127.0.0.1:27017/usermanagement`
+   - For Atlas: `MONGODB_URI=mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/usermanagement?retryWrites=true&w=majority`
 
-### 3. Seed Sample Data (Optional but Recommended)
-Populate the database with 10 realistic initial user records:
+### 4. Seed Sample Data (Optional)
+
+To populate the database with 10 sample user records:
+
 ```bash
-# From project root
-npm run seed
-
-# Or from server directory
 cd server
 npm run seed
 ```
 
-### 4. Run the Application
-Open two terminal windows:
+### 5. Start the Application
 
-**Terminal 1 (Backend API):**
+Open two terminals:
+
+**Terminal 1 (Backend):**
 ```bash
 cd server
 npm run dev
-# Server boots on http://localhost:5000
 ```
+Server runs on http://localhost:5000
 
-**Terminal 2 (Frontend Client):**
+**Terminal 2 (Frontend):**
 ```bash
 cd client
 npm run dev
-# Frontend boots on http://localhost:5173
 ```
+Frontend runs on http://localhost:5173
 
-Visit **`http://localhost:5173`** in your browser.
-
----
-
-## 🗄 Database Configuration
-
-### Using MongoDB Atlas (Current Setup)
-The project is connected to a MongoDB Atlas cluster. The connection string includes user credentials and automatically connects to the `usermanagement` database collection.
-
-### Using Local MongoDB
-If you prefer running a local MongoDB instance:
-1. Ensure your local MongoDB service is running (`mongod`).
-2. Update `server/.env`:
-   ```env
-   MONGODB_URI=mongodb://127.0.0.1:27017/usermanagement
-   ```
-3. Restart the backend server.
+Open http://localhost:5173 in your browser.
 
 ---
 
-## 📡 API Endpoints Reference
+## API Endpoints
 
-Base URL: `http://localhost:5000/api/users`
+Base URL: http://localhost:5000/api/users (also available at /users)
 
-| Method | Endpoint | Description |
-| :--- | :--- | :--- |
-| `GET` | `/api/health` | Health check probe |
-| `GET` | `/api/users/stats` | Aggregated metrics for dashboard (totals, active count, role breakdown, new this week) |
-| `GET` | `/api/users` | List all users (query params: `?search=`, `?role=`, `?status=`, `?sortBy=`, `?order=`) |
-| `GET` | `/api/users/:id` | Retrieve single user record by MongoDB `_id` |
-| `POST` | `/api/users` | Create new user (validates email uniqueness, required fields) |
-| `PUT` | `/api/users/:id` | Update existing user by `_id` |
-| `DELETE`| `/api/users/:id` | Permanently delete user by `_id` |
-
-### Sample Validation Error Response (`400 Bad Request`):
-```json
-{
-  "success": false,
-  "message": "Validation failed",
-  "errors": {
-    "name": "Name must be at least 2 characters",
-    "email": "Please provide a valid email address"
-  }
-}
-```
+- GET /api/users - Get all users (supports ?search=, ?role=, ?status=, ?sortBy=)
+- GET /api/users/stats - Get dashboard statistics and metrics
+- GET /api/users/:id - Get single user details by ID
+- POST /api/users - Create new user (checks for duplicate email)
+- PUT /api/users/:id - Update existing user
+- DELETE /api/users/:id - Delete user by ID
+- GET /api/health - API health check
 
 ---
 
-## ⚖️ Design Decisions & Trade-offs
+## Known Issues and Trade-offs
 
-1. **Native CSS Variables over CSS-in-JS**:
-   - *Decision*: We manipulated `:root` CSS variables rather than using Emotion or styled-components.
-   - *Why*: Direct CSS variable mutations have zero runtime parsing cost, cause zero layout re-renders, and allow external components to respond instantly to theme changes without context-nesting issues.
-2. **Font Storage in `localStorage` as Base64**:
-   - *Decision*: We convert the user's uploaded font to a Base64 data URI and store it in `localStorage` under `um_theme_font` with a 2.5MB safety guard.
-   - *Why*: The assignment specifies that UI preferences belong on the client. Storing the raw Base64 string enables synchronous rehydration on reload via `FontFace` without needing server-side asset uploading endpoints.
-3. **Delete Confirmation Dialog**:
-   - *Decision*: Built a custom, themed `ConfirmModal` component rather than relying on browser `window.confirm()`.
-   - *Why*: Matches the active theme aesthetic, presents clear contextual info (target user's name), and prevents accidental keystroke dismissals.
-4. **Known Minor Shortcuts**:
-   - For an application with over 100,000 records, server-side pagination (`?page=1&limit=25`) would be introduced. For this take-home scope (< 500 team members), in-memory query filtering and sorting was selected for instant UI responsiveness.
+- **Pagination**: For this assignment scope, client-side table filtering and sorting was used for speed. For large datasets (10,000+ users), server-side pagination with query limits would be added.
+- **Font File Storage**: Font files are stored in localStorage as base64 strings with a 2.5MB size guard to prevent exceeding browser storage limits. For a production app, fonts would typically be uploaded to an S3 bucket or CDN.
 
 ---
 
-## 🎥 5–8 Minute Video Walkthrough Script (Section 6)
+## Video Walkthrough Guide (5-8 Minutes)
 
-Use this outline during your screen recording to ensure you hit all evaluation criteria:
+Outline to follow during the screen recording:
 
-### 1. Introduction & 24-Hour Scope (0:00 - 1:00)
-> *"Hello! In this video, I'll walk you through my submission for the Full Stack Developer Intern Take-Home assignment: a User Management Dashboard with a zero-dependency Custom Theming Engine.*
->
-> *When approaching the 24-hour scope, I prioritized two core areas: first, rock-solid end-to-end CRUD persistence using Express and MongoDB Atlas; and second, the core differentiator — designing a clean, composable theming engine without relying on any external UI library.*
->
-> *I chose modern JavaScript (ES6+ with React JSX and Vite) to eliminate compilation friction and focus maximum effort on UI polish, edge cases, and font rehydration."*
+1. **Introduction (1 min)**:
+   - Introduce yourself and the project.
+   - Mention the 24-hour scope and why you prioritized the custom theming engine and solid MERN CRUD.
+   - Mention the choice of modern JavaScript for fast iteration.
 
-### 2. Architecture Overview (1:00 - 2:00)
-> *"Looking at the project structure, we have a clean separation of concerns:*
-> - *On the **backend (`server/`)**, we have an Express REST API following MVC: `User.js` model with Mongoose validation, `userController.js` handling business logic and aggregation stats, `validate.js` middleware catching errors before database queries, and a custom `errorHandler.js` returning structured JSON error responses.*
-> - *On the **frontend (`client/`)**, we have React 19 powered by Vite. API calls are cleanly encapsulated inside `services/api.js` and consumed through a custom `useUsers` hook. All theme state is orchestrated inside `context/ThemeContext.jsx`."*
+2. **Architecture (1 min)**:
+   - Backend: Express MVC structure (models, controllers, routes, validation, error handler).
+   - Frontend: React components, dedicated API service layer (`api.js`), custom hooks (`useUsers`, `useTheme`), and CSS custom properties.
 
-### 3. Core CRUD Workflow Walkthrough (2:00 - 3:30)
-> *(Demonstrate live in browser)*
-> 1. **Dashboard Overview**: *"Here on the Dashboard, we see live metric cards showing total users, active accounts, inactive accounts, and users joined this week, along with role breakdown bars."*
-> 2. **Create User**: *"Let's click 'Add New User'. If I try to submit empty or invalid fields, our client-side validation catches it. If I enter a duplicate email, our backend returns a 409 conflict and displays the error under the field. Let's create 'Dev Candidate' with an Active Developer role."*
-> 3. **Verify Live Sync**: *"Notice that as soon as the user is created, our user table updates, and switching to the Dashboard shows our Total Users count incremented immediately without a page refresh."*
-> 4. **Read & Edit**: *"Clicking the eye icon opens the Read modal with all details. Clicking edit lets us change their department to 'Architecture'. The update persists directly to MongoDB."*
-> 5. **Delete Confirmation**: *"Clicking delete triggers our custom Confirmation Modal. Upon confirming, the user is removed from MongoDB, the toast notifies us, and dashboard counts update live."*
+3. **CRUD Workflow Walkthrough (1.5 min)**:
+   - Show Dashboard stats.
+   - Create a new user with validation errors demonstration (try empty/invalid email).
+   - Show how the Dashboard count increases immediately without page refresh.
+   - View details with the Read modal.
+   - Edit the user and show the update.
+   - Delete the user with the confirmation modal.
 
-### 4. Custom Theming Engine Deep-Dive (3:30 - 5:30)
-> *(Click 'Theme Studio' in the Navbar)*
-> 1. **Design Presets**: *"Now for the core twist of this assignment: the theming engine. We built this from scratch using native CSS custom properties. Let's switch between our 4 coordinated presets: Oceanic Blue, Neon Violet, Darcula Slate, and Emerald Forest. Notice how every surface, text color, table border, and card shadow shifts instantly with zero lag."*
-> 2. **Button Color Override**: *"Next, the button color override. Regardless of which preset is active, the user can pick any custom accent color. Watch the primary buttons change immediately. Notice our contrast calculation: if I choose a bright yellow or neon green, the button text automatically flips to dark slate to satisfy WCAG contrast compliance. If I choose a dark crimson, it flips to white."*
-> 3. **Font Upload & FontFace API**: *"Now, custom font uploading. Let's drag in or select a font file (e.g. .ttf or .woff). The file is read as Base64, registered dynamically with the browser via `document.fonts.add(new FontFace(...))`, and assigned to `--font-family`. The entire UI instantly adopts the new typeface."*
-> 4. **Reload Persistence**: *"Now let's refresh the browser. Both the selected preset, the custom button color, and the uploaded font rehydrate seamlessly from `localStorage` without any flash of unstyled content."*
+4. **Theming Engine Demonstration (2 min)**:
+   - Open the Theme Studio drawer.
+   - Switch between the 4 presets (Oceanic Blue, Neon Violet, Darcula Slate, Emerald Forest) and show how surfaces/text change.
+   - Pick a custom button color and show how button text contrast adapts automatically (white vs dark text).
+   - Upload a custom font (.ttf/.woff) and show it applied live across the app.
+   - Refresh the page to prove everything persists in localStorage without any FOUT (flash of unstyled text).
 
-### 5. Backend Highlights & Technical Challenge Solved (5:30 - 6:45)
-> *"One piece of the backend I'm particularly proud of is the aggregation endpoint `/api/users/stats` which computes counts, active ratios, and role breakdowns in a single optimized database call, rather than making multiple frontend queries.*
->
-> *A technical challenge I overcame was handling font persistence. Since binary font files cannot be stored directly as strings, I implemented a Base64 encoding pipeline with file size validation, paired with `useLayoutEffect` rehydration on the client to ensure the font is registered before the DOM paints, preventing layout shifting."*
+5. **Backend Highlight & Challenges (1 min)**:
+   - Talk about the aggregation endpoint (`/api/users/stats`) for fast dashboard loading.
+   - Talk about handling base64 font storage and FontFace rehydration without layout flicker.
 
-### 6. Summary & Future Roadmap (6:45 - 7:30)
-> *"With more time, I would love to add:
-> 1. Server-side pagination with infinite scroll for datasets exceeding 100,000 records.
-> 2. CSV / Excel export of directory listings.
-> 3. Role-based access control (RBAC) with JWT authentication.
->
-> Thank you for reviewing my project!"*
+6. **Future Improvements (30 sec)**:
+   - Server-side pagination, CSV export, and authentication.
