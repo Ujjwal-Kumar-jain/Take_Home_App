@@ -50,7 +50,7 @@ export const Navbar = ({ activeTab, onTabChange }) => {
             onClick={() => setIsDrawerOpen(true)}
             icon={Palette}
           >
-            <span>Theme: <strong>{activePreset.name}</strong></span>
+            <span>Theme: <strong className="theme-btn-label">{activePreset.name}</strong></span>
           </Button>
         </div>
       </div>
