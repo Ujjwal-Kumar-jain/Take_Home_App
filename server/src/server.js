@@ -42,8 +42,9 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// User Management Routes
+// User Management Routes (supports both /api/users and /users paths)
 app.use('/api/users', userRoutes);
+app.use('/users', userRoutes);
 
 // 404 Handler for undefined routes
 app.use((req, res) => {

@@ -1,12 +1,12 @@
 import React from 'react';
-import { Users, UserCheck, UserX, UserPlus, Sparkles, ArrowRight, Clock } from 'lucide-react';
+import { Users, UserCheck, UserX, UserPlus, Sparkles, ArrowRight, Clock, RefreshCw } from 'lucide-react';
 import StatCard from '../components/dashboard/StatCard.jsx';
 import RoleBreakdown from '../components/dashboard/RoleBreakdown.jsx';
 import Badge from '../components/common/Badge.jsx';
 import Button from '../components/common/Button.jsx';
 import { useTheme } from '../hooks/useTheme.js';
 
-export const DashboardPage = ({ stats, isStatsLoading, onNavigateToUsers, onOpenCreateModal }) => {
+export const DashboardPage = ({ stats, isStatsLoading, onNavigateToUsers, onOpenCreateModal, onRefreshStats }) => {
   const { setIsDrawerOpen } = useTheme();
 
   return (
@@ -27,7 +27,17 @@ export const DashboardPage = ({ stats, isStatsLoading, onNavigateToUsers, onOpen
           <p>Real-time analytics and user directory overview persisted in MongoDB.</p>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+          <Button
+            variant="outline"
+            onClick={onRefreshStats}
+            loading={isStatsLoading}
+            icon={RefreshCw}
+            title="Refresh dashboard metrics"
+          >
+            Refresh
+          </Button>
+
           <Button
             variant="secondary"
             onClick={() => setIsDrawerOpen(true)}

@@ -21,6 +21,13 @@ export const App = () => {
     deleteUser
   } = useUsers();
 
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    if (tab === 'dashboard') {
+      loadStats();
+    }
+  };
+
   const handleOpenCreateModal = () => {
     setActiveTab('users');
     setIsFormOpen(true);
@@ -29,7 +36,7 @@ export const App = () => {
   return (
     <div className="app-container">
       {/* Persistent Navigation */}
-      <Navbar activeTab={activeTab} onTabChange={setActiveTab} />
+      <Navbar activeTab={activeTab} onTabChange={handleTabChange} />
 
       {/* Main Content Area */}
       <main className="main-content">
@@ -39,6 +46,7 @@ export const App = () => {
             isStatsLoading={isStatsLoading}
             onNavigateToUsers={() => setActiveTab('users')}
             onOpenCreateModal={handleOpenCreateModal}
+            onRefreshStats={loadStats}
           />
         ) : (
           <UsersPage

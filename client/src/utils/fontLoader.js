@@ -24,7 +24,7 @@ export const loadAndApplyFont = async (base64DataUrl) => {
   try {
     // If FontFace API is supported by the browser
     if ('fonts' in document && typeof FontFace !== 'undefined') {
-      const newFace = new FontFace(CUSTOM_FONT_FAMILY, `url(${base64DataUrl})`, {
+      const newFace = new FontFace(CUSTOM_FONT_FAMILY, `url("${base64DataUrl}")`, {
         style: 'normal',
         weight: 'normal'
       });
@@ -57,7 +57,7 @@ export const loadAndApplyFont = async (base64DataUrl) => {
       styleTag.textContent = `
         @font-face {
           font-family: '${CUSTOM_FONT_FAMILY}';
-          src: url(${base64DataUrl});
+          src: url("${base64DataUrl}");
         }
       `;
       document.documentElement.style.setProperty(

@@ -13,8 +13,16 @@ html, body {
   height: 100%;
 }
 
-body {
+body,
+button,
+input,
+select,
+textarea,
+optgroup {
   font-family: var(--font-family);
+}
+
+body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   line-height: 1.5;
