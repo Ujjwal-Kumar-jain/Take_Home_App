@@ -16,6 +16,7 @@ export const App = () => {
     isStatsLoading,
     filters,
     setFilters,
+    loadStats,
     createUser,
     updateUser,
     deleteUser
