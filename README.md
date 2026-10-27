@@ -42,6 +42,17 @@ The active theme is composed of three parts:
 
 ---
 
+## Use of AI Assistance (Claude & Antigravity)
+
+In accordance with modern engineering practices, AI pair-programming tools (**Claude** and **Google Antigravity**) were utilized during this project:
+
+- **Architecture & Scoping**: Brainstormed the composition model for the zero-dependency theming engine (how presets, button accent overrides, and FontFace dynamically compose into :root CSS variables) to ensure compliance with the 24-hour evaluation timeline.
+- **Contrast Algorithm**: Assisted in implementing the WCAG 2.1 relative luminance math to dynamically calculate whether dark or white text provides optimal legibility against custom button colors.
+- **Seed Data Generation**: Generated diverse, realistic mock users (departments, roles, and timestamps) for `seed.js`.
+- **Responsive Layout & Code Review**: Helped refine responsive breakpoints for edge-to-edge desktop layouts and verified structured error handling across Express routes.
+
+---
+
 ## Setup and Running Locally
 
 ### 1. Prerequisites
